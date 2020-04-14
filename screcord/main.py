@@ -1,10 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-@Author: Ssfanli
-@Time  : 2020/04/06 10:37 上午
-@Desc  : function of screen record wrapper
-"""
+
 import signal
 import sys
 import typing
