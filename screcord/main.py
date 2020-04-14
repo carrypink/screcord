@@ -164,23 +164,3 @@ def record(
                 stop(proc_name, p)
         return wrapper
     return decorator
-
-
-if __name__ == '__main__':
-    sys.path.append('..')
-    from utils.base_device_info import DeviceInfo
-    # @record('a', device=DeviceInfo('a').info['id'], file_path='./tt1.mp4', offset=(1,))
-    @record('i', DeviceInfo('i').info['id'], './ios.mp4', offset=(2, 0), pre_kill=False)
-    def ss(n):
-        for i in range(n):
-            print(i)
-            time.sleep(1)
-            # assert i < 3, 'i >= 3'
-
-    @record('a', DeviceInfo('a').info['id'], './tt2.mp4')
-    def sf(n):
-        for i in range(n):
-            print(i)
-            time.sleep(1)
-    ss(5)
-    sf(3)
