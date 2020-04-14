@@ -130,3 +130,5 @@ dmypy.json
 
 # add IDE ignore
 .idea/
+*.mp4
+xrecord
