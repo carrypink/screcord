@@ -9,8 +9,6 @@ __URL__ = r"https://github.com/ssfanli/screcord.git"
 __VERSION__ = r"0.0.3"
 __DESCRIPTION__ = r"A python wrapper for Android/iOS screen recording."
 
-import signal
-import sys
 import typing
 import os
 import subprocess
@@ -55,7 +53,7 @@ def start(proc_name: str, cmd: str, pre_kill: bool = True):
     pre_kill: before start whether kill or not, default True
     """
     if pre_kill:
-        sigint(proc_name)
+        kill(proc_name)
     logger.info(f'\n========== START RECORD ==========')
     return proc(cmd)
 
@@ -67,14 +65,11 @@ def stop(proc_name: str, _proc: subprocess.Popen):
     """
     try:
         assert _proc.poll() is None, f"run command failed"
-        if sys.platform == "win32":
-            _proc.terminate()
-        else:
-            _proc.send_signal(signal.SIGINT)
+        _proc.terminate()
         logger.info(f'\n========== STOP RECORD ==========')
     except Exception as e:
         logger.error(e)
-        sigint(proc_name)
+        kill(proc_name)
 
 
 def process_is_exist(process_name: str):
@@ -85,15 +80,13 @@ def process_is_exist(process_name: str):
         return False
 
 
-def sigint(process_name: str):
-    """kill a specified proc by `kill -2 pid` == `os.kill(pid, signal.SIGINT)`,
+# TODO: 当进程假死，kill -2/kill -15均无法杀死
+def kill(process_name: str):
+    """kill a specified proc by `kill -9 pid`
     what you don't know proc pid
-
-    `kill -9 pid` maybe cause saves error
-    needed 1s after kill process
     """
     if process_is_exist(process_name):
-        kill_cmd = "ps -ef | grep '%s' | grep -v 'grep' | awk '{print $2}' | xargs kill -2" % process_name
+        kill_cmd = "ps -ef | grep '%s' | grep -v 'grep' | awk '{print $2}' | xargs kill -9" % process_name
         proc(kill_cmd)
         time.sleep(1)
         logger.info(f'=== KILL PROCESS: {process_name} ===')
