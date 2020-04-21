@@ -6,7 +6,7 @@ __AUTHOR__ = r"ssfanli"
 __AUTHOR_EMAIL__ = r"freedomlidi@163.com"
 __LICENSE__ = r"MIT"
 __URL__ = r"https://github.com/ssfanli/screcord.git"
-__VERSION__ = r"0.0.4"
+__VERSION__ = r"0.0.5"
 __DESCRIPTION__ = r"A python wrapper for Android/iOS screen recording."
 
 import typing
@@ -54,7 +54,7 @@ def start(proc_name: str, cmd: str, pre_kill: bool = True):
     """
     if pre_kill:
         kill(proc_name)
-    logger.info(f'\n========== START RECORD ==========')
+    logger.info(f'========= START RECORD ==========')
     return proc(cmd)
 
 
@@ -66,7 +66,7 @@ def stop(proc_name: str, _proc: subprocess.Popen):
     try:
         assert _proc.poll() is None, f"run command failed"
         _proc.terminate()
-        logger.info(f'\n========== STOP RECORD ==========')
+        logger.info(f'========== STOP RECORD ==========')
     except Exception as e:
         logger.error(e)
         kill(proc_name)
@@ -80,7 +80,6 @@ def process_is_exist(process_name: str):
         return False
 
 
-# TODO: 当进程假死，kill -2/kill -15均无法杀死
 def kill(process_name: str):
     """kill a specified proc by `kill -9 pid`
     what you don't know proc pid
