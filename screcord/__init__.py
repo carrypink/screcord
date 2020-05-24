@@ -142,7 +142,6 @@ def record(
     file_path: mp4 file path
     offset: default (1, 1), mean of: before record sleep 1s and after record sleep 1s
     pre_kill: before start whether kill or not, default True
-    xrecord: xrecord file path
     """
     def decorator(func):
         @functools.wraps(func)
