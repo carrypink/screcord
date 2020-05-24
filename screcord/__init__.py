@@ -15,6 +15,7 @@ import subprocess
 import time
 import functools
 from loguru import logger
+import screcord
 
 
 def proc_output(cmd: str, decode=True):
@@ -100,6 +101,9 @@ def _cmd(platform: str, **kwargs):
         cmd = 'scrcpy -s "{device}" --render-expired-frames -Nr "{fp}"'.format(**kwargs)
         proc_name = 'scrcpy'
     else:
+        kwargs['xrecord'] = os.path.join(
+            os.path.dirname(screcord.__file__), 'xrecord'
+        )
         cmd = '"{xrecord}" -q -i="{device}" -o="{fp}" -f'.format(**kwargs)
         proc_name = 'xrecord'
     logger.info(
@@ -129,8 +133,7 @@ def record(
         device: typing.Union[str],
         file_path: typing.Union[str, os.PathLike],
         offset: typing.Tuple[int] = (1, 1),
-        pre_kill: typing.Union[bool] = True,
-        xrecord: typing.Union[str, os.PathLike] = None
+        pre_kill: typing.Union[bool] = True
 ):
     """record wrapper
 
@@ -145,7 +148,7 @@ def record(
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
             ofs = _update_offset(offset)
-            proc_name, cmd = _cmd(platform, device=device, fp=file_path, xrecord=xrecord)
+            proc_name, cmd = _cmd(platform, device=device, fp=file_path)
             p = start(proc_name, cmd, pre_kill)
             try:
                 time.sleep(ofs[0])

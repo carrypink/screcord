@@ -29,7 +29,6 @@ def android_case(t: int):
     file_path='./demo2.mp4',                # video file path
     offset=(2, 1),                          # same as android
     pre_kill=True,                          # same as android
-    xrecord='./xrecord'                     # xrecord file path, iOS required fields,
                                             # Refs: https://github.com/WPO-Foundation/xrecord
 )
 def ios_case(t: int):
