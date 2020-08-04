@@ -6,7 +6,7 @@ __AUTHOR__ = r"ssfanli"
 __AUTHOR_EMAIL__ = r"freedomlidi@163.com"
 __LICENSE__ = r"MIT"
 __URL__ = r"https://github.com/ssfanli/screcord.git"
-__VERSION__ = r"0.0.6"
+__VERSION__ = r"0.0.7"
 __DESCRIPTION__ = r"A python wrapper for Android/iOS screen recording."
 
 import typing
@@ -15,7 +15,6 @@ import subprocess
 import time
 import functools
 from loguru import logger
-import screcord
 
 
 def proc_output(cmd: str, decode=True):
@@ -92,6 +91,10 @@ def kill(process_name: str):
         logger.info(f'=== KILL PROCESS: {process_name} ===')
 
 
+def xrecord_path():
+    return os.path.join(os.path.dirname(__file__), 'xrecord')
+
+
 def _cmd(platform: str, **kwargs):
     """build cmd according to platform
     """
@@ -101,9 +104,7 @@ def _cmd(platform: str, **kwargs):
         cmd = 'scrcpy -s "{device}" --render-expired-frames -Nr "{fp}"'.format(**kwargs)
         proc_name = 'scrcpy'
     else:
-        kwargs['xrecord'] = os.path.join(
-            os.path.dirname(screcord.__file__), 'xrecord'
-        )
+        kwargs['xrecord'] = xrecord_path()
         cmd = '"{xrecord}" -q -i="{device}" -o="{fp}" -f'.format(**kwargs)
         proc_name = 'xrecord'
     logger.info(
@@ -161,3 +162,5 @@ def record(
     return decorator
 
 
+if __name__ == '__main__':
+    print(xrecord_path())
